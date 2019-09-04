@@ -1,4 +1,4 @@
-package com.security.demo.config;
+package com.security.demo.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll();
+        http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
     }
 
     /**
