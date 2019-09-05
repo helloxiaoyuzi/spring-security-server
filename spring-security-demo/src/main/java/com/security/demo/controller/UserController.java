@@ -1,6 +1,7 @@
 package com.security.demo.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.security.demo.common.aspect.annotation.AutoLog;
 import com.security.demo.common.exception.UserNotExistException;
 import com.security.demo.vo.User;
 import io.swagger.annotations.*;
@@ -29,7 +30,7 @@ public class UserController {
         log.info("{}", user);
         return user;
     }
-
+    @AutoLog
     @GetMapping("/all")
     @JsonView({User.UserDetailView.class})
     @ApiOperation(value = "获取所有用户", notes = "")

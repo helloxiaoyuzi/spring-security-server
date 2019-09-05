@@ -27,7 +27,7 @@ public class User {
     @ApiModelProperty(value = "用户id")
     @JsonView(UserSimpleView.class)
     private String id;
-    @NotEmpty
+    @NotEmpty(message = "用户名不能为空")
     @ApiModelProperty(value = "用户名")
     @JsonView(UserSimpleView.class)
     private String username;

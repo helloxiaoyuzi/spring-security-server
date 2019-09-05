@@ -30,6 +30,12 @@
 			<artifactId>common</artifactId>
 			<version>${spring.security.common.version}</version>
 		</dependency>
+		<!-- json -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.35</version>
+		</dependency>
 		<!-- swagger2-->
 		<dependency>
 			<groupId>io.springfox</groupId>
