@@ -20,6 +20,7 @@
     </parent>
 
     <modules>
+        <module>spring-security-common</module>
         <module>spring-security-core</module>
         <module>spring-security-app</module>
         <module>spring-security-browser</module>
@@ -31,6 +32,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
+        <spring.security.common.version>0.0.1-SNAPSHOT</spring.security.common.version>
         <spring.security.core.version>0.0.1-SNAPSHOT</spring.security.core.version>
         <spring.security.app.version>0.0.1-SNAPSHOT</spring.security.app.version>
         <spring.security.browser.version>0.0.1-SNAPSHOT</spring.security.browser.version>

@@ -25,6 +25,11 @@
 			<artifactId>browser</artifactId>
 			<version>${spring.security.browser.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.security</groupId>
+			<artifactId>common</artifactId>
+			<version>${spring.security.common.version}</version>
+		</dependency>
 		<!-- swagger2-->
 		<dependency>
 			<groupId>io.springfox</groupId>

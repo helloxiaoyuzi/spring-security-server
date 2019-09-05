@@ -1,6 +1,7 @@
 package com.security.demo.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.security.demo.common.exception.UserNotExistException;
 import com.security.demo.vo.User;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -52,8 +53,9 @@ public class UserController {
     @PutMapping()
     @ApiOperation(value = "修改用户", notes = "")
     User updateUser(@ApiParam(required = true, name = "user", value = "用户") @RequestBody User user) {
-        log.info("new user:{}", user.toString());
-        return user;
+        throw new UserNotExistException(user.getId());
+//        log.info("new user:{}", user.toString());
+//        return user;
     }
 
     @DeleteMapping("/{id}")
