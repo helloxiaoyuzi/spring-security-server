@@ -2,11 +2,12 @@ package com.security.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@SpringBootApplication
+
+/**
+ * com.security.*    扫描其他模块需要注入的bean
+ */
+@SpringBootApplication(scanBasePackages="com.security.*")
 public class SpringSecurityDemoApplication {
 
 	public static void main(String[] args) {
@@ -19,10 +20,5 @@ public class SpringSecurityDemoApplication {
 		fasdfsdfasdfasfas132312
 		 */
 		SpringApplication.run(SpringSecurityDemoApplication.class, args);
-	}
-
-	@GetMapping("/hello")
-	public String hello(){
-		return System.currentTimeMillis()+"hello spring security3";
 	}
 }
