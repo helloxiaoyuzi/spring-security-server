@@ -18,12 +18,13 @@ public class User {
     /**
      * 用户简单视图
      */
-    public interface UserSimpleView{};
+    public interface UserSimpleView{}
 
     /**
      * 用户详情视图
      */
-    public interface UserDetailView extends UserSimpleView{};
+    public interface UserDetailView extends UserSimpleView{}
+
     @ApiModelProperty(value = "用户id")
     @JsonView(UserSimpleView.class)
     private String id;

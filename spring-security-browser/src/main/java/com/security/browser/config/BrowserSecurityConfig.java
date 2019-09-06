@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
@@ -16,9 +16,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter{
         //对所有请求都不作认证拦截
 //        http.csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
         //基于浏览器表单登录验证
-        http.formLogin().and().authorizeRequests().anyRequest().authenticated();
+//        http.formLogin().and().authorizeRequests().anyRequest().authenticated();
         //基于httpBasic登录验证
-//        http.httpBasic().and().authorizeRequests().anyRequest().authenticated();
+        http.httpBasic().and().authorizeRequests().anyRequest().authenticated();
     }
 
     /**
