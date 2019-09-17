@@ -1,5 +1,7 @@
 package com.security.core.social;
 
+import com.security.core.properties.SecurityProperties;
+import com.security.core.social.qq.config.QQSpringSocialConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,8 @@ public class SocialConfig extends SocialConfigurerAdapter{
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private SecurityProperties securityProperties;
 
 
     @Override
@@ -33,6 +37,7 @@ public class SocialConfig extends SocialConfigurerAdapter{
 
     @Bean
     public SpringSocialConfigurer springSocialConfigurer(){
-        return new SpringSocialConfigurer();
+        System.out.println("++++++++++"+securityProperties.getSocial().getFilterProcessesUrl());
+        return new QQSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
     }
 }
