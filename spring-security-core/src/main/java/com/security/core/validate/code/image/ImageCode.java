@@ -1,61 +1,29 @@
 package com.security.core.validate.code.image;
 
+import com.security.core.validate.code.ValidateCode;
+
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
  * @author liyu
  * @date 2019/9/7 11:06
- * 校验码对象
+ * 图形校验码
  */
-public class ImageCode {
-    /**
-     * 校验码
-     */
-    private String code;
-    /**
-     * 过期时间
-     */
-    private LocalDateTime expireTime;
+public class ImageCode extends ValidateCode {
     /**
      * 图形验证码
      */
     private BufferedImage image;
 
-    public ImageCode(BufferedImage image,String code, int expireTime) {
-        this.code = code;
-        this.expireTime = LocalDateTime.now().plusSeconds(expireTime);
+    public ImageCode(BufferedImage image, String code, int expireIn) {
+        super(code, expireIn);
         this.image = image;
     }
 
-    public ImageCode(BufferedImage image,String code, LocalDateTime expireTime) {
-        this.code = code;
-        this.expireTime = expireTime;
+    public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
+        super(code, expireTime);
         this.image = image;
-    }
-
-    /**
-     * 判断校验码是否过期
-     * @return
-     */
-    public boolean isExpried() {
-        return LocalDateTime.now().isAfter(expireTime);
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public LocalDateTime getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(LocalDateTime expireTime) {
-        this.expireTime = expireTime;
     }
 
     public BufferedImage getImage() {

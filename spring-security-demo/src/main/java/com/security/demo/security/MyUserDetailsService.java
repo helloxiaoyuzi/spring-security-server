@@ -1,4 +1,4 @@
-package com.security.browser.service.impl;
+package com.security.demo.security;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Log4j2
 @Component
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService,SocialUserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,10 +31,22 @@ public class MyUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("登陆用户名：{}",username);
+        log.info("表单登陆用户名：{}",username);
+        return buildUser(username);
+    }
+
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        log.info("社交登陆用户的userId：{}",userId);
+        return buildUser(userId);
+    }
+
+    private SocialUserDetails buildUser(String user){
+        //根据用户名查找用户信息
+        //根据查找到的用户信息判断用户是否冻结过期等等
         String databasePassword=passwordEncoder.encode("123456");
         log.info("数据库真实密码:{}",databasePassword);
         //根据用户名查找用户信息
-        return new User(username,databasePassword, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return new SocialUser(user,databasePassword, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
 }

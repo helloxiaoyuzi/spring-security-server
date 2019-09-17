@@ -1,47 +1,51 @@
 package com.security.browser.config;
 
-import com.security.browser.authentication.AuthenctiationFailureHandler;
-import com.security.browser.authentication.AuthenticationSuccessHandler;
+
+import com.security.core.authentication.AbstractChannelSecurityConfig;
+import com.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.security.core.properties.SecurityConstants;
 import com.security.core.properties.SecurityProperties;
-import com.security.core.validate.code.filter.ValidateCodeFilter;
+import com.security.core.validate.code.ValidateCodeSecurityConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
 @Log4j2
 @Configuration
 @EnableWebSecurity
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter{
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SecurityProperties securityProperties;
     @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
     @Autowired
-    private AuthenctiationFailureHandler authenctiationFailureHandler;
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
     @Autowired
     private UserDetailsService userDetailsService;
-    @Bean
-    protected PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private SpringSocialConfigurer springSocialConfigurer;
+
     @Bean
-    protected PersistentTokenRepository tokenRepository(){
-        JdbcTokenRepositoryImpl tokenRepository=new JdbcTokenRepositoryImpl();
+    protected PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    protected PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
 //        tokenRepository.setCreateTableOnStartup(true);
         return tokenRepository;
@@ -55,32 +59,33 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter{
 //        http.formLogin().and().authorizeRequests().anyRequest().authenticated();
         //基于httpBasic登录验证
 //        http.httpBasic().and().authorizeRequests().anyRequest().authenticated();
-        ValidateCodeFilter validateCodeFilter =new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(authenctiationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
 
-        log.info("跳转登陆页面URL：{}",securityProperties.getBrowser().getLoginPage());
+        //加载父类的配置
+        applyPasswordAuthenticationConfig(http);
+
+        log.info("跳转登陆页面URL：{}", securityProperties.getBrowser().getLoginPage());
         http.csrf().disable()
-                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)//在登录过滤器前，加验证码校验器
-                .formLogin()//表单登录
-                    .loginPage("/authentication/require")//登录验证请求页
-                    .loginProcessingUrl("/authentication/form")//登录表单提交URL
-                    .successHandler(authenticationSuccessHandler)//请求成功处理器
-                    .failureHandler(authenctiationFailureHandler)//请求失败处理器
-                    .and()
+                    .apply(validateCodeSecurityConfig)
+                .and()
+                    .apply(smsCodeAuthenticationSecurityConfig)
+                .and()
+                    .apply(springSocialConfigurer)//第三方社交登陆拦截配置
+                .and()
                 .rememberMe()//记住我
                     .tokenRepository(tokenRepository())
                     .tokenValiditySeconds(securityProperties.getBrowser().getRemeberMeSeconds())//配置记住我过期时长
                     .userDetailsService(userDetailsService)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/authentication/require",securityProperties.getBrowser().getLoginPage(),"/code/image")
+                    .authorizeRequests()
+                .antMatchers(//配置不需要验证的URL
+                        SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        securityProperties.getBrowser().getLoginPage(),
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
     }
-
 
 
 }
