@@ -25,6 +25,7 @@
         <module>spring-security-app</module>
         <module>spring-security-browser</module>
         <module>spring-security-demo</module>
+        <module>spring-security-demo-app</module>
     </modules>
 
     <properties>

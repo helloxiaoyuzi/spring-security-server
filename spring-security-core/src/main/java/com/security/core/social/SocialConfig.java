@@ -3,6 +3,7 @@ package com.security.core.social;
 import com.security.core.properties.SecurityProperties;
 import com.security.core.social.qq.config.QQSpringSocialConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
  * TODO
  */
 @Configuration
+@ConditionalOnProperty(prefix = "project.security.social.qq",name = "app-id")//属性配置了app-id改配置才生效
 @EnableSocial
 public class SocialConfig extends SocialConfigurerAdapter{
 
@@ -37,7 +39,6 @@ public class SocialConfig extends SocialConfigurerAdapter{
 
     @Bean
     public SpringSocialConfigurer springSocialConfigurer(){
-        System.out.println("++++++++++"+securityProperties.getSocial().getFilterProcessesUrl());
         return new QQSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
     }
 }

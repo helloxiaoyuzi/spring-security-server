@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.security.SocialUserDetails;
-import org.springframework.stereotype.Component;
 
 /**
  * @author liyu

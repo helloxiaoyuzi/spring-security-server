@@ -10,7 +10,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
-import org.springframework.social.security.SocialUserDetails;
 
 /**
  * @author liyu
