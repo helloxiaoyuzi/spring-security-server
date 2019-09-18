@@ -91,6 +91,24 @@ public class CommonResult<T> {
     }
 
     /**
+     * session过期
+     */
+    public static <T> CommonResult<T> invalidSession(T data) {
+        return new CommonResult<T>(ResultCode.INVALID_SESSION.getCode(), ResultCode.INVALID_SESSION.getMessage(), data);
+    }
+
+    /**
+     * token过期
+     */
+    public static <T> CommonResult<T> invalidToken(T data) {
+        return new CommonResult<T>(ResultCode.INVALID_TOKEN.getCode(), ResultCode.INVALID_TOKEN.getMessage(), data);
+    }
+
+    /**
+     * session过期
+     */
+
+    /**
      * 未授权返回结果
      */
     public static <T> CommonResult<T> forbidden(T data) {

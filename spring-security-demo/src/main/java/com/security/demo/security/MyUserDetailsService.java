@@ -49,4 +49,20 @@ public class MyUserDetailsService implements UserDetailsService,SocialUserDetail
         //根据用户名查找用户信息
         return new SocialUser(user,databasePassword, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
+
+    private boolean isAccountNonExpired(){
+        return true;
+    }
+
+    private boolean isAccountNonLocked(){
+        return true;
+    }
+    boolean isCredentialsNonExpired(){
+        return true;
+    }
+
+    boolean isEnabled(){
+        return true;
+    }
+
 }

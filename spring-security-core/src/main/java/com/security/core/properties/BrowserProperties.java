@@ -9,7 +9,7 @@ public class BrowserProperties {
     /**
      * 默认登陆页面
      */
-    private String loginPage="/signIn.html";
+    private String loginPage = "/signIn.html";
     /**
      * 登录后返回类型，默认JSON
      */
@@ -17,7 +17,11 @@ public class BrowserProperties {
     /**
      * 浏览器，记住我默认时间一周
      */
-    private int remeberMeSeconds= 3600*24*7;
+    private int remeberMeSeconds = 3600 * 24 * 7;
+    /**
+     * session配置项
+     */
+    private SessionProperties session = new SessionProperties();
 
     public String getLoginPage() {
         return loginPage;
@@ -41,5 +45,13 @@ public class BrowserProperties {
 
     public void setRemeberMeSeconds(int remeberMeSeconds) {
         this.remeberMeSeconds = remeberMeSeconds;
+    }
+
+    public SessionProperties getSession() {
+        return session;
+    }
+
+    public void setSession(SessionProperties session) {
+        this.session = session;
     }
 }

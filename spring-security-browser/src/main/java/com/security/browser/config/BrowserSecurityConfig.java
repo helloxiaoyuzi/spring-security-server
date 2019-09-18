@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -37,6 +39,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     private DataSource dataSource;
     @Autowired
     private SpringSocialConfigurer springSocialConfigurer;
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
 
     @Bean
     protected PasswordEncoder passwordEncoder() {
@@ -76,12 +83,22 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                     .tokenValiditySeconds(securityProperties.getBrowser().getRemeberMeSeconds())//配置记住我过期时长
                     .userDetailsService(userDetailsService)
                 .and()
+                .sessionManagement()//session配置项
+                    .invalidSessionStrategy(invalidSessionStrategy)//session过期处理策略
+                    .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSessions())//同一个用户在系统中的最大session数，默认1
+                    .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionsPreventsLogin())//达到最大session时是否阻止新的登录请求，默认为false，不阻止，新的登录会将老的登录失效掉
+                    .expiredSessionStrategy(sessionInformationExpiredStrategy)//session并发处理策略
+                .and()
+                .and()
                     .authorizeRequests()
                 .antMatchers(//配置不需要验证的URL
                         SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*")
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl()+".json",
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl()+".html"
+                    )
                 .permitAll()
                 .anyRequest()
                 .authenticated();

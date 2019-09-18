@@ -11,6 +11,7 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,4 +59,10 @@ public class BrowserSecurityController {
         }
         return CommonResult.unauthorized("访问的页面需要身份认证，请引导用户到登陆页面");
     }
+
+//    @GetMapping("/session/invalid")
+//    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+//    public CommonResult invalidSession(){
+//        return CommonResult.invalidSession("session过期，请引导用户重新登陆");
+//    }
 }
