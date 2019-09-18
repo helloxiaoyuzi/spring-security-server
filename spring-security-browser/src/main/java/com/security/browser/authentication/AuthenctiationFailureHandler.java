@@ -49,8 +49,6 @@ public class AuthenctiationFailureHandler extends SimpleUrlAuthenticationFailure
 		}else{
 			super.onAuthenticationFailure(request, response, exception);
 		}
-		
-		
 	}
 
 }
